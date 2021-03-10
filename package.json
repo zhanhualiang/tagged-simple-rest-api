@@ -1,0 +1,16 @@
+{
+  "name": "tagged-server",
+  "version": "1.0.0",
+  "description": "a simple local server with Express.js and Mysql.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zhanhua liang",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
