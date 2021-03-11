@@ -10,11 +10,11 @@ const pool = mysql.createConnection({
 
 pool.connect();
 
-exports.getAllUsers = async () => {
+exports.getAllUsers = () => {
 
     try {
-        return await new Promise((resolve) => {
-            pool.query('SELECT * FROM users', (error, results, fields) => {
+        return new Promise((resolve) => {
+            pool.query('SELECT * FROM users', (error, results) => {
                 if (error) {
                     throw error;
                 }
@@ -29,33 +29,10 @@ exports.getAllUsers = async () => {
     }
 
 }
-/*
-exports.getAllUsers = () => {
-    var output;
-    try {
-        var result = await pool.query('SELECT * FROM users', (error, results, fields) => {
-            if (error) throw error;
-            console.log('result');
-            console.log(results);
-            output = results;
-            console.log('inside');
-            console.log(output);
-            return results;
-        });
-    } catch (e) {
-        console.log("Something went wrong when getting all users!");
-        console.log(e);
-        return e;
-    }
-    console.log('outside');
-    console.log(output);
 
-}
-*/
-
-exports.getUserInfo = async (id) => {
+exports.getUserInfo = (id) => {
     try {
-        return await new Promise((resolve) => {
+        return new Promise((resolve) => {
             pool.query(`SELECT name, email FROM users WHERE id=${id}`, (error, results) => {
                 if (error) {
                     throw error;
@@ -70,9 +47,9 @@ exports.getUserInfo = async (id) => {
     }
 }
 
-exports.getUserTasksOfDate = async (id, date) => {
+exports.getUserTasksOfDate = (id, date) => {
     try {
-        return await new Promise((resolve) => {
+        return new Promise((resolve) => {
             pool.query(`SELECT title, description, task_order, finish, share FROM tasks WHERE uid=${id} AND DATE(create_at)=DATE('${date}')`, (error, results) => {
                 if (error) {
                     throw error;
@@ -87,10 +64,10 @@ exports.getUserTasksOfDate = async (id, date) => {
     }
 }
 
-exports.registerUser = async (email, pw, name) => {
+exports.registerUser = (email, pw, name) => {
     try {
         if (email && pw && name) {
-            return await new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 pool.query(`SELECT * FROM users WHERE email='${email}'`, (error, results) => {
                     if (error) {
                         reject(error.code);
@@ -104,6 +81,9 @@ exports.registerUser = async (email, pw, name) => {
                         });
                     }
                 });
+            }).catch((e) => {
+                console.error(e);
+                return e;
             })
         } else throw 'missing query params!'
 
