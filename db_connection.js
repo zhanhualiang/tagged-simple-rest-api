@@ -131,4 +131,57 @@ exports.updateTask = async (taskId, title, desc, taskOrder, share) => {
     });
 }
 
+//Update task order.
+exports.updateTaskOrder = async (taskId, taskOrder) => {
+    return new Promise((resolve, reject) => {
+            pool.query(`UPDATE tasks 
+                SET task_order=${taskOrder}
+                WHERE id=${taskId}`, (error, result) => {
+                if (error) reject(error);
+                if (result) {
+                    console.log(`Update task Order successful!`);
+                    resolve('Update task Order successful!');
+                }
+            });
+
+    }).catch((e) => {
+        console.error(e);
+        return false;
+    });
+}
+
+//Delete task.
+exports.deleteTask = async (taskId) => {
+    return new Promise((resolve, reject) => {
+            pool.query(`DELETE FROM tasks WHERE id=${taskId}`, (error, result) => {
+                if (error) reject(error);
+                if (result) {
+                    console.log(`Delete task successful!`);
+                    console.log(result);
+                    resolve('Delete task successful!');
+                }
+            });
+
+    }).catch((e) => {
+        console.error(e);
+        return false;
+    });
+}
+
+//Simple sign-in.
+exports.signIn = async (email, pw) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT * FROM users WHERE email='${email}' AND password=SHA1('${pw}')`, (error, result) => {
+            if(error) reject(error);
+            if(result) {
+                console.log(`User ${email} try to log in.`);
+                resolve(`Log in successful!`);
+            }
+        });
+    }).catch((e) => {
+        console.error(e);
+        return 'Password is incorrect or E-mail doesn\'t exist!';
+    });
+}
+
 

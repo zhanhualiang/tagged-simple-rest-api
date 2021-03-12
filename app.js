@@ -47,6 +47,30 @@ app.patch('/task/update/:taskId/', (req, res) => {
     });
 });
 
+//Update task order with Patch.
+app.patch('/task/update/:taskId/:taskOrder/', (req, res) => {
+  db_connection.updateTaskOrder(req.params.taskId, req.params.taskOrder).then(
+    (result) => {
+      res.send(result);
+    });
+});
+
+//Delete task with task id.
+app.delete('/task/delete/', (req, res) => {
+  db_connection.deleteTask(req.body.taskId).then(
+    (result) => {
+      res.send(result);
+    });
+})
+
+//Log in.
+app.post('/user/sign-in/', (req, res) => {
+  db_connection.signIn(req.body.email, req.body.pw).then(
+    (result) => {
+      res.send(result);
+    });
+})
+
 app.listen(port, () => {
   console.log(`Tagged server app listening at http://localhost:${port}`)
 })
