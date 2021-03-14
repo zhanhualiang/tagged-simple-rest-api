@@ -65,8 +65,8 @@ app.patch('/task/update/:taskId/', (req, res) => {
 });
 
 //Update task order with Patch.
-app.patch('/task/update/:taskId/:taskOrder/', (req, res) => {
-  db_connection.updateTaskOrder(req.params.taskId, req.params.taskOrder).then(
+app.patch('/task/update/order/:taskId/', (req, res) => {
+  db_connection.updateTaskOrder(req.params.taskId, req.body.taskOrder).then(
     (result) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.send(result);

@@ -134,16 +134,15 @@ exports.updateTask = async (taskId, title, desc, taskOrder, share) => {
 //Update task order.
 exports.updateTaskOrder = async (taskId, taskOrder) => {
     return new Promise((resolve, reject) => {
-            pool.query(`UPDATE tasks 
-                SET task_order=${taskOrder}
-                WHERE id=${taskId}`, (error, result) => {
+        pool.query(`UPDATE tasks 
+            SET task_order=${taskOrder}
+            WHERE id=${taskId}`, (error, result) => {
                 if (error) reject(error);
                 if (result) {
                     console.log(`Update task Order successful!`);
                     resolve({respond: 'Update task Order successful!'});
                 }
-            });
-
+        });
     }).catch((e) => {
         console.error(e);
         return {respond: false};
