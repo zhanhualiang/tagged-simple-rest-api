@@ -113,10 +113,10 @@ exports.addTask = async (uid, title, desc, taskOrder, share, date) => {
 }
 
 //Update Task.
-exports.updateTask = async (taskId, title, desc, taskOrder, share) => {
+exports.updateTask = async (taskId, title, desc, taskOrder, share, finish) => {
     return new Promise((resolve, reject) => {
             pool.query(`UPDATE tasks 
-                SET title='${title}', description='${desc}', task_order=${taskOrder}, share=${share}
+                SET title='${title}', description='${desc}', task_order=${taskOrder}, share=${share}, finish=${finish}
                 WHERE id=${taskId}`, (error, result) => {
                 if (error) reject(error);
                 if (result) {
@@ -137,6 +137,38 @@ exports.updateTaskOrder = async (taskId, taskOrder) => {
         pool.query(`UPDATE tasks 
             SET task_order=${taskOrder}
             WHERE id=${taskId}`, (error, result) => {
+                if (error) reject(error);
+                if (result) {
+                    console.log(`Update task Order successful!`);
+                    resolve({respond: 'Update task Order successful!'});
+                }
+        });
+    }).catch((e) => {
+        console.error(e);
+        return {respond: false};
+    });
+}
+
+//Update task order in batch.
+exports.updateTaskOrderInList = async (taskOrderList) => {
+    console.log(taskOrderList);
+    let taskQuery = "CASE id ";
+    let idList = "(";
+    for(var i = 0; i < taskOrderList.length; i++) {
+        taskQuery += `WHEN ${taskOrderList[i].id} THEN ${taskOrderList[i].task_order} `;
+        idList += `${taskOrderList[i].id},`
+    }
+    taskQuery += "END";
+    idList = idList.slice(0,-1);
+    idList += ")";
+    const query = `UPDATE tasks SET task_order= ${taskQuery} WHERE id IN ${idList}`;
+    return new Promise((resolve, reject) => {
+        pool.query(
+            // `UPDATE tasks 
+            // SET task_order=${taskOrder}
+            // WHERE id=${taskId}`
+            query
+            , (error, result) => {
                 if (error) reject(error);
                 if (result) {
                     console.log(`Update task Order successful!`);

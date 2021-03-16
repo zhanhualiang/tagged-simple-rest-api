@@ -57,7 +57,7 @@ app.post('/task/add/', (req, res) => {
 
 //Update task info with Patch.
 app.patch('/task/update/:taskId/', (req, res) => {
-  db_connection.updateTask(req.params.taskId, req.body.title, req.body.desc, req.body.taskOrder, req.body.share).then(
+  db_connection.updateTask(req.params.taskId, req.body.title, req.body.desc, req.body.taskOrder, req.body.share, req.body.finish).then(
     (result) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.send(result);
@@ -67,6 +67,15 @@ app.patch('/task/update/:taskId/', (req, res) => {
 //Update task order with Patch.
 app.patch('/task/update/order/:taskId/', (req, res) => {
   db_connection.updateTaskOrder(req.params.taskId, req.body.taskOrder).then(
+    (result) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(result);
+    });
+});
+
+//Update task order in batch
+app.patch('/task/order/update/', (req, res) => {
+  db_connection.updateTaskOrderInList(req.body.taskOrderList).then(
     (result) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.send(result);
