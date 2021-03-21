@@ -16,7 +16,7 @@ exports.getAllUsers = () => {
                 if (error) {
                     throw error;
                 }
-                console.log(results);
+                // console.log(results);
                 resolve(results);
             });
         })
@@ -36,7 +36,7 @@ exports.getUserInfo = (id) => {
                 if (error) {
                     throw error;
                 }
-                console.log(results);
+                // console.log(results);
                 resolve(results);
             });
         })
@@ -54,7 +54,7 @@ exports.getUserTasksOfDate = (id, date) => {
                 if (error) {
                     throw error;
                 }
-                console.log(results);
+                // console.log(results);
                 resolve(results);
             });
         })
@@ -188,7 +188,7 @@ exports.deleteTask = async (taskId) => {
                 if (error) reject(error);
                 if (result) {
                     console.log(`Delete task successful!`);
-                    console.log(result);
+                    // console.log(result);
                     resolve({respond: 'Delete task successful!'});
                 }
             });
