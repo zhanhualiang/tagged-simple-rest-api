@@ -119,6 +119,6 @@ app.post('/user/sign-in/', (req, res) => {
     });
 })
 
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log(`Tagged server app listening at http://localhost:${port}`)
 })

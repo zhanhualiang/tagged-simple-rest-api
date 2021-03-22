@@ -1,3 +1,4 @@
+const { query } = require('express');
 const mysql = require('mysql');
 
 const pool = mysql.createPool({
@@ -98,8 +99,11 @@ exports.registerUser = (email, pw, name) => {
 exports.addTask = async (uid, title, desc, taskOrder, share, date) => {
     return new Promise((resolve, reject) => {
 
-            pool.query(`INSERT INTO tasks (uid, title, description, task_order, share, date) VALUE (${uid}, '${title}', '${desc}', '${taskOrder}', '${share}', DATE('${date}'))`, (error, result) => {
-                if (error) reject({resopnd: error.code});
+            pool.query(`INSERT INTO tasks (uid, title, description, task_order, share, date) VALUE (${uid}, ${mysql.escape(title)}, ${mysql.escape(desc)}, '${taskOrder}', '${share}', DATE('${date}'))`, (error, result) => {
+                if (error) {
+                    console.error(error);
+                    reject({resopnd: error.code});
+                }
                 if (result) {
                     console.log(`Add task successful! Result: ${result.insertId}`);
                     resolve({respond: 'Add task successful!'});
@@ -116,7 +120,7 @@ exports.addTask = async (uid, title, desc, taskOrder, share, date) => {
 exports.updateTask = async (taskId, title, desc, taskOrder, share, finish) => {
     return new Promise((resolve, reject) => {
             pool.query(`UPDATE tasks 
-                SET title='${title}', description='${desc}', task_order=${taskOrder}, share=${share}, finish=${finish}
+                SET title=${mysql.escape(title)}, description=${mysql.escape(desc)}, task_order=${taskOrder}, share=${share}, finish=${finish}
                 WHERE id=${taskId}`, (error, result) => {
                 if (error) reject(error);
                 if (result) {
@@ -161,13 +165,13 @@ exports.updateTaskOrderInList = async (taskOrderList) => {
     taskQuery += "END";
     idList = idList.slice(0,-1);
     idList += ")";
-    const query = `UPDATE tasks SET task_order= ${taskQuery} WHERE id IN ${idList}`;
+    const localQuery = `UPDATE tasks SET task_order= ${taskQuery} WHERE id IN ${idList}`;
     return new Promise((resolve, reject) => {
         pool.query(
             // `UPDATE tasks 
             // SET task_order=${taskOrder}
             // WHERE id=${taskId}`
-            query
+            localQuery
             , (error, result) => {
                 if (error) reject(error);
                 if (result) {
