@@ -204,14 +204,17 @@ exports.signIn = async (email, pw) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT * FROM users WHERE email='${email}' AND password=SHA1('${pw}')`, (error, result) => {
             if(error) reject(error);
-            if(result) {
+            console.log(result)
+            if(result.length == 1) {
                 console.log(`User ${email} try to log in.`);
-                resolve({respond: `Log in successful!`});
+                resolve(result[0]);
+            } else {
+                reject(false);
             }
         });
     }).catch((e) => {
         console.error(e);
-        return {respond: 'Password is incorrect or E-mail doesn\'t exist!'};
+        return {e};
     });
 }
 

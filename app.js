@@ -1,6 +1,7 @@
 const express = require('express');
 const db_connection = require('./db_connection');
 var cors = require('cors');
+const auth = require('./authentication');
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -93,10 +94,28 @@ app.delete('/task/delete/', (req, res) => {
 
 //Log in.
 app.post('/user/sign-in/', (req, res) => {
-  db_connection.signIn(req.body.email, req.body.pw).then(
+  db_connection.signIn(req.body.email, req.body.password).then(
     (result) => {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.send(result);
+      if(result.hasOwnProperty('id')){
+        const payload = {
+          email: result.email,
+          id: result.id,
+          name: result.name
+        }
+        const token = auth.signToken(payload);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.status(200).json({
+          status: "success",
+          jwtToken: token,
+          expiresIn: "300"
+        });
+      } else {
+        res.json({
+          status: "failed",
+          message: "Login failed."
+        });
+      }
+
     });
 })
 
