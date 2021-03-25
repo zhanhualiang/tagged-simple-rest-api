@@ -7,7 +7,7 @@ const TEST_PUBLIC_KEY = fs.readFileSync('./pub.key');
 exports.signToken = (body) => {
     const token = jwt.sign(body, TEST_PRIVATE_KEY, {
         algorithm: "RS256",
-        expiresIn: 300,
+        expiresIn: "6h",
     })
     return token;
 }

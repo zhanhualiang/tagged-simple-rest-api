@@ -114,7 +114,6 @@ app.post('/user/sign-in/', (req, res) => {
         res.status(200).json({
           status: "success",
           jwtToken: token,
-          expiresIn: "300",
           uid: result.id
         });
       } else {
