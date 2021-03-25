@@ -30,11 +30,18 @@ app.get('/user/:id', (req, res) => {
 
 // Get user tasks of the day
 app.get('/user/:id/:date', (req, res) => {
-  db_connection.getUserTasksOfDate(req.params.id, req.params.date)
-  .then( (result) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.json(result);
-  });
+  //console.log(req.headers);
+  //console.log(auth.checkToken(req))
+  if(auth.checkToken(req)) {
+    db_connection.getUserTasksOfDate(req.params.id, req.params.date)
+    .then( (result) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.json(result);
+    });
+  } else {
+    res.json({respond: "invalid token or token expired."});
+  }
+
 });
 
 // Post user sign-up data and check
