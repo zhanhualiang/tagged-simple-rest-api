@@ -21,11 +21,16 @@ app.get('/user/', (req, res) => {
 
 // Get user info
 app.get('/user/:id', (req, res) => {
+  if(auth.checkToken(req)){
     db_connection.getUserInfo(req.params.id)
     .then( (result) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.json(result);}
       );
+  } else {
+    res.json({respond: "invalid token or token expired."});
+  }
+
 });
 
 // Get user tasks of the day
